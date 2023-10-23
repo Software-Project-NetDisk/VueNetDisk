@@ -19,4 +19,14 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 import router from './router'
 app.use(router);
 
+// 路由守卫 
+import "~/router/permission.js"
+
+// pinia
+import { createPinia } from 'pinia';
+const pinia = createPinia();
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate"
+pinia.use(piniaPluginPersistedstate)
+app.use(pinia);
+
 app.mount('#app');

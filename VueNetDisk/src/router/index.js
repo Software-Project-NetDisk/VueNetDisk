@@ -3,6 +3,7 @@ import Index from '~/pages/index.vue'
 import NotFound from '~/pages/404.vue'
 import About from '~/pages/about.vue'
 import Login from '~/pages/login.vue'
+import Register from '~/pages/register.vue'
 
 
 const routes = [{
@@ -15,6 +16,10 @@ const routes = [{
 }, {
     path: '/login',
     component: Login
+}, {
+    path: '/register',
+    component: Register
+
 }, {
     path: '/index',
     component: Index
