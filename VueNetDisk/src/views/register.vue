@@ -58,7 +58,7 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
-import { register } from '~/api/user'
+import { register } from '~/api/account'
 import { toast } from "~/util/notification"
 import { useRouter } from 'vue-router'
 

@@ -4,15 +4,6 @@ import WindiCSS from 'vite-plugin-windicss'
 import path from "path"
 
 // https://vitejs.dev/config/
-// export default defineConfig({
-
-//   resolve: {
-//     alias: {
-//       "~": path.resolve(__dirname, "src")
-//     }
-//   },
-//   plugins: [vue(), WindiCSS(),],
-// })
 
 export default defineConfig(({ mode }) => {
   // 获取`.env`环境配置文件

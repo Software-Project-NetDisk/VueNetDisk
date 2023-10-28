@@ -1,9 +1,9 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
-import Index from '~/pages/index.vue'
-import NotFound from '~/pages/404.vue'
-import About from '~/pages/about.vue'
-import Login from '~/pages/login.vue'
-import Register from '~/pages/register.vue'
+import NotFound from '~/views/404.vue'
+import About from '~/views/about.vue'
+import Login from '~/views/login.vue'
+import Register from '~/views/register.vue'
+import AppLayout from '~/layout/AppLayout.vue'
 
 
 const routes = [{
@@ -22,7 +22,26 @@ const routes = [{
 
 }, {
     path: '/index',
-    component: Index
+    component: AppLayout,
+    children: [
+        {
+            path: '',
+            // 软加载，可节省空间
+            component: () => import('~/components/FileList.vue'),
+        },
+        {
+            path: 'fileList',
+            // 软加载，可节省空间
+            component: () => import('~/components/FileList.vue'),
+        },
+        {
+            //根据路由参数file_pid动态加载文件列表
+            path: 'fileList/:file_pid/:file_name',
+            // 软加载，可节省空间
+            name: 'fileList',
+            component: () => import('~/components/FileList.vue'),
+        }
+    ]
 }
 ];
 

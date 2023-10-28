@@ -39,7 +39,7 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
-import { login } from '~/api/user'
+import { login } from '~/api/account'
 import { toast } from "~/util/notification"
 import { useRouter } from 'vue-router'
 import { setToken } from '~/util/cookie'
@@ -88,7 +88,7 @@ const onSubmit = () => {
                 // cookie.set("token", res.token)
                 setToken(res.token);
 
-                router.push("/index")
+                router.push("/index/fileList")
             }).finally(() => {
                 loading.value = false;
             })
