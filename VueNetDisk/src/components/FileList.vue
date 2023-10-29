@@ -1,11 +1,11 @@
 <template>
     <el-card class="box-card">
-        <template #header>
+        <!-- <template #header>
             <div class="card-header">
                 <el-button type="primary">新建文件夹</el-button>
                 <el-button type="primary">上传文件</el-button>
             </div>
-        </template>
+        </template> -->
         <el-table ref="multipleTableRef" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55" />
             <el-table-column prop="file_name" label="文件名" :show-overflow-tooltip="true">
@@ -22,14 +22,51 @@
             </el-table-column>
         </el-table>
     </el-card>
+    <!--悬浮按钮-->
+    <div>
+        <el-button type="primary" :icon="Plus" class="add" circle @click="addBtnVisible = true" />
+        <el-dialog v-model="addBtnVisible" :show-close="false" class="addDialog">
+            <div>
+                <div @click="createNewFolderVisible = true, addBtnVisible = false">
+                    新建文件夹
+                </div>
+                <div @click="uploadFileVisible = true, addBtnVisible = false">
+                    上传文件
+                </div>
+            </div>
+        </el-dialog>
+    </div>
+
+    <!--新建文件夹对话框-->
+    <el-dialog v-model="createNewFolderVisible" title="新建文件夹" width="30%">
+        <el-input v-model="newFolderName" />
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button type="primary" @click="handlerCreateNewFolder">
+                    确定
+                </el-button>
+            </span>
+        </template>
+    </el-dialog>
+
+    <!--上传文件对话框-->
 </template>
 
 <script lang="ts" setup>
+import { Plus } from '@element-plus/icons-vue'
 import { useUserStore } from '../store';
-import { getFileList } from '../api/file';
+import { getFileList, createNewFolder } from '../api/file';
 import { ref, watch } from 'vue'
 import { ElTable } from 'element-plus'
 import { useRouter, useRoute } from 'vue-router'
+import { toast } from "../util/notification"
+import { fa } from 'element-plus/es/locale';
+
+// 点击添加按钮弹出对话框
+const addBtnVisible = ref(false)
+const createNewFolderVisible = ref(false)
+const uploadFileVisible = ref(false)
+const newFolderName = ref("新建文件夹")
 
 const router = useRouter();
 const route = useRoute();
@@ -86,7 +123,7 @@ watch(
     }
 )
 
-const openFile = async (file_id, file_name, is_folder) => {
+const openFile = (file_id, file_name, is_folder) => {
     // is_folder=1为文件夹，0为文件
     if (is_folder == 1) {
         // 打开文件夹时改变路由参数，从而刷新文件列表
@@ -94,6 +131,14 @@ const openFile = async (file_id, file_name, is_folder) => {
     }
 }
 
+// 创建新文件夹
+const handlerCreateNewFolder = async () => {
+    createNewFolder(user_id, file_pid.value, newFolderName.value).then(res => {
+        createNewFolderVisible.value = false;
+        toast("创建文件夹成功");
+        handler();
+    })
+}
 </script>
 
 <style>
@@ -113,5 +158,36 @@ const openFile = async (file_id, file_name, is_folder) => {
 
 .box-card {
     width: auto;
+}
+
+.add {
+    min-width: 50px;
+    min-height: 50px;
+    font-size: 20px;
+    bottom: 80px;
+    position: fixed;
+    right: 80px;
+    z-index: 10;
+}
+
+.addDialog {
+    .el-dialog__header {
+        display: none;
+    }
+
+    .dj-dialog-content {
+        padding: 0px;
+        overflow: unset;
+    }
+
+    width: auto;
+    height: auto;
+    position: fixed;
+    bottom: 100px;
+    right: 80px;
+
+    >div {
+        padding: 10px;
+    }
 }
 </style>

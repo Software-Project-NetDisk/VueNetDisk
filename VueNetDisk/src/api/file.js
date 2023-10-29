@@ -6,3 +6,11 @@ export function getFileList(user_id, file_pid) {
         file_pid,
     })
 }
+
+export function createNewFolder(user_id, file_pid, folder_name) {
+    return axios.post("/file/createNewFolder", {
+        user_id,
+        file_pid,
+        folder_name,
+    })
+}
