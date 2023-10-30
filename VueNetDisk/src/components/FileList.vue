@@ -1,12 +1,7 @@
 <template>
     <el-card class="box-card">
-        <!-- <template #header>
-            <div class="card-header">
-                <el-button type="primary">新建文件夹</el-button>
-                <el-button type="primary">上传文件</el-button>
-            </div>
-        </template> -->
-        <el-table ref="multipleTableRef" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange">
+        <el-table ref="multipleTableRef" :data="fileList.fileList" style="width: 100%"
+            @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55" />
             <el-table-column prop="file_name" label="文件名" :show-overflow-tooltip="true">
                 <template #default="scope"><el-link target="_blank"
@@ -50,17 +45,29 @@
     </el-dialog>
 
     <!--上传文件对话框-->
+    <el-dialog v-model="uploadFileVisible" :show-close="false" class="uploadDialog">
+        <el-upload class="upload-demo" drag action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" multiple>
+            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+            <div class="el-upload__text">
+                拖拽文件到这里或<em>点击上传</em>
+            </div>
+            <template #tip>
+                <div class="el-upload__tip">
+                    jpg/png files with a size less than 500kb
+                </div>
+            </template>
+        </el-upload>
+    </el-dialog>
 </template>
 
 <script lang="ts" setup>
 import { Plus } from '@element-plus/icons-vue'
-import { useUserStore } from '../store';
-import { getFileList, createNewFolder } from '../api/file';
+import { useUserStore, useFileListStore, useFilePIDStore } from '../store';
+import { createNewFolder } from '../api/file';
 import { ref, watch } from 'vue'
 import { ElTable } from 'element-plus'
 import { useRouter, useRoute } from 'vue-router'
 import { toast } from "../util/notification"
-import { fa } from 'element-plus/es/locale';
 
 // 点击添加按钮弹出对话框
 const addBtnVisible = ref(false)
@@ -72,10 +79,11 @@ const router = useRouter();
 const route = useRoute();
 
 const user = useUserStore();
+const fileList = useFileListStore();
+const filePID = useFilePIDStore();
 const userInfo = user.userInfo;
 // userInfo不为空
 const user_id = userInfo && userInfo["user_id"];
-const file_pid = ref(0);
 //定义文件类型
 interface File {
     file_id: number
@@ -98,47 +106,50 @@ const handleSelectionChange = (val: File[]) => {
     multipleSelection.value = val
 }
 
-const tableData = ref<File[]>([])
+// 初始化fileList
+fileList.getFileList(user_id, filePID.file_pid);
 
-const handler = async () => {
-    getFileList(user_id, file_pid.value).then(res => {
-        console.log(res);
-        // 获取fileList
-        tableData.value = res
-    })
-}
-handler();
-// 监听路由参数的变化，一旦变化就刷新文件列表
+// 订阅filePID，一旦file_pid变化就更新文件列表
+filePID.$subscribe((mutation, state) => {
+    console.log("订阅");
+    console.log(mutation);
+    console.log(state.file_pid);
+    fileList.getFileList(user_id, state.file_pid);
+})
+// 监听路由参数的变化，一旦变化就改变全局file_pid
 watch(
     () => route.params,
     (newValue, oldValue) => {
-        console.log("newValue" + newValue.file_pid);
-        console.log("oldValue" + oldValue.file_pid);
         if (newValue.file_pid) {
-            file_pid.value = Number(newValue.file_pid);
+            filePID.file_pid = Number(newValue.file_pid);
         } else {
-            file_pid.value = 0;
+            filePID.file_pid = 0;
         }
-        handler();
     }
 )
 
 const openFile = (file_id, file_name, is_folder) => {
     // is_folder=1为文件夹，0为文件
     if (is_folder == 1) {
-        // 打开文件夹时改变路由参数，从而刷新文件列表
+        // 打开文件夹时改变路由参数，从而改变全局file_pid
         router.push({ name: 'fileList', params: { file_pid: file_id, file_name: file_name } });
     }
 }
 
 // 创建新文件夹
 const handlerCreateNewFolder = async () => {
-    createNewFolder(user_id, file_pid.value, newFolderName.value).then(res => {
+    createNewFolder(user_id, filePID.file_pid, newFolderName.value).then(res => {
         createNewFolderVisible.value = false;
         toast("创建文件夹成功");
-        handler();
+        // 更新文件列表
+        fileList.getFileList(user_id, filePID.file_pid);
     })
 }
+
+// 上传文件
+
+
+
 </script>
 
 <style>

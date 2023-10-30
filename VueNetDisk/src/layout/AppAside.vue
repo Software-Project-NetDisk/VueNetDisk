@@ -7,7 +7,7 @@
                     Web网盘
                 </a>
 
-                <el-menu-item index="/fileList">
+                <el-menu-item index="/index/fileList">
                     <el-icon>
                         <Folder />
                     </el-icon>
