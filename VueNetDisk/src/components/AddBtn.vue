@@ -15,48 +15,22 @@
     </div>
 
     <!--新建文件夹对话框-->
-    <el-dialog v-model="createNewFolderVisible" title="新建文件夹" width="30%">
-        <el-input v-model="newFolderName" />
-        <template #footer>
-            <span class="dialog-footer">
-                <el-button type="primary" @click="handlerCreateNewFolder">
-                    确定
-                </el-button>
-            </span>
-        </template>
-    </el-dialog>
+    <CreateNewFolderDialog v-model="createNewFolderVisible"></CreateNewFolderDialog>
 
     <!--上传文件对话框-->
-    <el-dialog v-model="uploadFileVisible" :show-close="false" class="uploadDialog">
-        <el-upload class="upload-demo" drag action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" multiple>
-            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-            <div class="el-upload__text">
-                拖拽文件到这里或<em>点击上传</em>
-            </div>
-            <template #tip>
-                <div class="el-upload__tip">
-                    jpg/png files with a size less than 500kb
-                </div>
-            </template>
-        </el-upload>
-    </el-dialog>
+    <UploadFileDialog v-model="uploadFileVisible"></UploadFileDialog>
 </template>
 
 <script setup>
-const user = useUserStore();
-const fileList = useFileListStore();
-const filePID = useFilePIDStore();
-const userInfo = user.userInfo;
+import CreateNewFolderDialog from './createNewFolderDialog.vue';
+import UploadFileDialog from './UploadFileDialog.vue';
+import { Plus } from '@element-plus/icons-vue';
+import { ref } from 'vue';
 
-// 创建新文件夹
-const handlerCreateNewFolder = async () => {
-    createNewFolder(user_id, filePID.file_pid, newFolderName.value).then(res => {
-        createNewFolderVisible.value = false;
-        toast("创建文件夹成功");
-        // 更新文件列表
-        fileList.getFileList(user_id, filePID.file_pid);
-    })
-}
+const addBtnVisible = ref(false)
+const createNewFolderVisible = ref(false)
+const uploadFileVisible = ref(false)
+
 </script>
 
 <style>

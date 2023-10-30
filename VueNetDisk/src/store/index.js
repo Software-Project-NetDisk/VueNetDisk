@@ -7,7 +7,8 @@ export const useUserStore = defineStore('user', {
     persist: true,
     state: () => {
         return {
-            userInfo: null,
+            // 只是为了初始化，不然会报错，该值没有任何意义
+            userInfo: [[0]],
         }
     },
     actions: {
@@ -27,6 +28,7 @@ export const useUserStore = defineStore('user', {
 export const useFileListStore = defineStore('fileList', {
     state: () => {
         return {
+            // 只是为了初始化，不然会报错，该值没有任何意义
             fileList: [[0]],
         }
     },
