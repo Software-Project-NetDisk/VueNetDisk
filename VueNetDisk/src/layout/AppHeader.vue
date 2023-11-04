@@ -7,6 +7,14 @@
             <el-breadcrumb-item>promotion list</el-breadcrumb-item>
             <el-breadcrumb-item>promotion detail</el-breadcrumb-item>
         </el-breadcrumb>
+        <div @click="uploadVisible = !uploadVisible">
+            <el-icon>
+                <UploadFilled />
+            </el-icon>
+            <span>上传列表</span>
+        </div>
+
+        <UploadList v-show="uploadVisible" @visible="updateVisible"></UploadList>
 
         <!--下拉菜单-->
         <el-dropdown>
@@ -24,13 +32,19 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import { useUserStore } from '../store';
 import { logout } from '../api/account';
 import { ElMessage, ElMessageBox } from 'element-plus'
+import UploadList from '~/components/UploadList.vue'
 const user = useUserStore();
 const userInfo = user.userInfo;
-
+const uploadVisible = ref(false)
 // 退出事件
+function updateVisible() {
+    uploadVisible.value = true
+}
+
 const handleLogout = async () => {
     await ElMessageBox.confirm(
         '确定要退出吗?',

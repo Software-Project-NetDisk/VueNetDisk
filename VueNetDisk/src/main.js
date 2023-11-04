@@ -29,4 +29,16 @@ import piniaPluginPersistedstate from "pinia-plugin-persistedstate"
 pinia.use(piniaPluginPersistedstate)
 app.use(pinia);
 
+// upload插件
+import uploader from 'vue-simple-uploader'
+import 'vue-simple-uploader/dist/style.css'
+app.use(uploader)
+
+// 引入全局样式
+import './styles/index.scss'
+
+// 引入图标
+import { Icon } from '@iconify/vue'
+app.component('Icon', Icon)
+
 app.mount('#app');

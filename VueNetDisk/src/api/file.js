@@ -14,3 +14,12 @@ export function createNewFolder(user_id, file_pid, folder_name) {
         folder_name,
     })
 }
+
+export function mergeFile(user_id, file_pid, file_md5, file_name) {
+    return axios.post("/file/mergeFile", {
+        user_id,
+        file_pid,
+        file_md5,
+        file_name
+    })
+}

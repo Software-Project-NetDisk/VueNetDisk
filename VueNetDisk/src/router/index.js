@@ -40,7 +40,12 @@ const routes = [{
             // 软加载，可节省空间
             name: 'fileList',
             component: () => import('~/components/FileList.vue'),
-        }
+        },
+        {
+            path: 'uploadList',
+            // 软加载，可节省空间
+            component: () => import('~/components/UploadList.vue'),
+        },
     ]
 }
 ];

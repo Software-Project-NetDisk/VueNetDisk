@@ -109,35 +109,4 @@ const openFile = (file_id, file_name, is_folder) => {
 .box-card {
     width: auto;
 }
-
-.add {
-    min-width: 50px;
-    min-height: 50px;
-    font-size: 20px;
-    bottom: 80px;
-    position: fixed;
-    right: 80px;
-    z-index: 10;
-}
-
-.addDialog {
-    .el-dialog__header {
-        display: none;
-    }
-
-    .dj-dialog-content {
-        padding: 0px;
-        overflow: unset;
-    }
-
-    width: auto;
-    height: auto;
-    position: fixed;
-    bottom: 100px;
-    right: 80px;
-
-    >div {
-        padding: 10px;
-    }
-}
 </style>

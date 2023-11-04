@@ -21,12 +21,12 @@
                         </el-icon>
                         <span>传输</span>
                     </template>
-                    <el-menu-item index="/uploadList">
+                    <!-- <el-menu-item index="/index/uploadList">
                         <el-icon>
                             <UploadFilled />
                         </el-icon>
                         <span>上传</span>
-                    </el-menu-item>
+                    </el-menu-item> -->
 
                     <el-menu-item index="/downloadList">
                         <el-icon>
@@ -35,12 +35,12 @@
                         <span>下载</span>
                     </el-menu-item>
 
-                    <el-menu-item index="/finishedList">
+                    <!-- <el-menu-item index="/finishedList">
                         <el-icon>
                             <UploadFilled />
                         </el-icon>
                         <span>已完成</span>
-                    </el-menu-item>
+                    </el-menu-item> -->
                 </el-sub-menu>
 
 
