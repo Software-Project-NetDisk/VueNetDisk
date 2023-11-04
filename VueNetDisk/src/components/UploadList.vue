@@ -87,6 +87,7 @@ export default {
                     console.log("message信息")
                     console.log(objMessage)
                     if (objMessage.skipUpload) {
+                        fileList.getFileList(user_id, filePID.file_pid);
                         skip = true
                     } else {
                         skip = (objMessage.uploaded || []).indexOf(chunk.offset + 1) >= 0
@@ -97,7 +98,8 @@ export default {
             },
             query: (file, chunk) => {
                 return {
-                    ...file.params
+                    userId: user_id,
+                    filePid: filePID.file_pid,
                 }
             }
         }
@@ -150,6 +152,10 @@ export default {
             if (opts.testChunks !== undefined) {
                 uploader.value.opts.testChunks = opts.testChunks
             }
+            // // 自定义参数
+            // if (opts.params) {
+            //     uploader.value.opts.params = opts.params
+            // }
             // merge 的方法，类型为Function，返回Promise
             if (opts.mergeFn) {
                 mergeFn = opts.mergeFn
@@ -225,7 +231,7 @@ export default {
             console.log("需要合并")
             statusSet(file.id, 'merging')
 
-            mergeFile(user_id, filePID.file_pid, file.uniqueIdentifier, file.name)
+            mergeFile(user_id, filePID.file_pid, file.uniqueIdentifier, file.name, file.size)
                 .then((res) => {
                     console.log(res)
                     // 文件合并成功
@@ -233,6 +239,7 @@ export default {
                     statusRemove(file.id)
                     fileList.getFileList(user_id, filePID.file_pid);
                 })
+
         }
         function onFileProgress(rootFile, file, chunk) {
             console.log(

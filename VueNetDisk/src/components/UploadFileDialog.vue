@@ -23,7 +23,7 @@ const upload = () => {
     Bus.emit('openUploader', {
         // 给服务端的额外参数
         params: {
-            page: 'home'
+
         },
         options: {
             target: 'http://localhost:8080/file/uploadFile'

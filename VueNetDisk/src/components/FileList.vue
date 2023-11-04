@@ -13,7 +13,8 @@
                 <template #default="scope">{{ scope.row.update_time }}</template>
             </el-table-column> />
             <el-table-column prop="file_size" label="大小" :show-overflow-tooltip="true">
-                <template #default="scope">{{ scope.row.file_size ? scope.row.file_size : "--" }}</template>
+                <template #default="scope">{{ scope.row.file_size ? (scope.row.file_size / (1048576)).toFixed(2) + "MB" :
+                    "--" }}</template>
             </el-table-column>
         </el-table>
     </el-card>
