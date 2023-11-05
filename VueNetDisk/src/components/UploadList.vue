@@ -80,21 +80,15 @@ export default {
             testChunks: true,
             // 服务器分片校验函数，秒传及断点续传基础
             checkChunkUploadedByResponse: function (chunk, message) {
-                let skip = false
+                let objMessage = JSON.parse(message).data
+                // 如果文件存在，实现秒传
+                console.log("上传")
+                if (objMessage.skipUpload) {
+                    // trigger('fileSuccess')
+                    return true
+                }
+                return (objMessage.uploadedChunks || []).indexOf(chunk.offset + 1) >= 0
 
-                try {
-                    let objMessage = JSON.parse(message).data
-                    console.log("message信息")
-                    console.log(objMessage)
-                    if (objMessage.skipUpload) {
-                        fileList.getFileList(user_id, filePID.file_pid);
-                        skip = true
-                    } else {
-                        skip = (objMessage.uploaded || []).indexOf(chunk.offset + 1) >= 0
-                    }
-                } catch (e) { }
-
-                return skip
             },
             query: (file, chunk) => {
                 return {
@@ -147,18 +141,6 @@ export default {
             // 自定义上传url
             if (opts.target) {
                 uploader.value.opts.target = opts.target
-            }
-            // 是否可以秒传、断点续传
-            if (opts.testChunks !== undefined) {
-                uploader.value.opts.testChunks = opts.testChunks
-            }
-            // // 自定义参数
-            // if (opts.params) {
-            //     uploader.value.opts.params = opts.params
-            // }
-            // merge 的方法，类型为Function，返回Promise
-            if (opts.mergeFn) {
-                mergeFn = opts.mergeFn
             }
             // 自定义文件上传类型
             if (opts.accept) {
@@ -215,10 +197,6 @@ export default {
         }
         function onFileSuccess(rootFile, file, response, chunk) {
             let res = JSON.parse(response)
-            console.log("上传返回结果")
-            console.log(res)
-            console.log(file)
-            console.log(chunk)
             // 服务端自定义的错误（即http状态码为200，但是是错误的情况），这种错误是Uploader无法拦截的
             if (res.status != 200) {
                 error("上传失败")
@@ -226,6 +204,9 @@ export default {
                 statusSet(file.id, 'failed')
                 return
             }
+
+            console.log("abcde")
+            console.log(res);
 
             // 文件状态设为“合并中”
             console.log("需要合并")
@@ -238,6 +219,7 @@ export default {
                     trigger('fileSuccess')
                     statusRemove(file.id)
                     fileList.getFileList(user_id, filePID.file_pid);
+                    user.getInfo()
                 })
 
         }
@@ -248,7 +230,21 @@ export default {
             )
         }
         function onFileError(rootFile, file, response, chunk) {
-            error(response)
+            let res = JSON.parse(response)
+            // 网盘空间不足
+            if (res.status == 402) {
+                error(res.message)
+                return
+            }
+
+            // 文件已存在，实现秒传
+            if (res.status == 300) {
+                trigger('fileSuccess')
+                statusSet(file.id, 'success')
+                fileList.getFileList(user_id, filePID.file_pid);
+                user.getInfo()
+                return
+            }
         }
         /**
          * 新增的自定义的状态: 'md5'、'merging'、'transcoding'、'failed'
@@ -271,6 +267,10 @@ export default {
                 },
                 failed: {
                     text: '上传失败',
+                    bgc: '#e2eeff'
+                },
+                success: {
+                    text: '上传成功',
                     bgc: '#e2eeff'
                 }
             }

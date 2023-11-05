@@ -63,10 +63,6 @@ const handleLogout = async () => {
             })
         })
         .catch(() => {
-            // ElMessage({
-            //     type: 'info',
-            //     message: 'Delete canceled',
-            // })
         })
 }
 
