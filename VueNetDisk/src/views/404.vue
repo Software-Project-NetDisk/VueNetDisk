@@ -7,9 +7,4 @@
 </template>
 
 <script setup>
-
-import { getCurrentInstance } from 'vue';
-
-
-
 </script>

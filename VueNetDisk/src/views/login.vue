@@ -42,7 +42,7 @@ import { ref, reactive } from 'vue'
 import { login } from '~/api/account'
 import { toast } from "~/util/notification"
 import { useRouter } from 'vue-router'
-import { setToken } from '~/util/cookie'
+import { setToken, setRootToken } from '~/util/cookie'
 
 const router = useRouter();
 
@@ -86,9 +86,14 @@ const onSubmit = () => {
                 // 储存token
                 // const cookie = useCookies();
                 // cookie.set("token", res.token)
-                setToken(res.token);
+                if (res.isRoot) {
+                    setRootToken(res.token)
+                    router.push("/root")
+                } else {
+                    setToken(res.token);
+                    router.push("/index")
+                }
 
-                router.push("/index/fileList")
             }).finally(() => {
                 loading.value = false;
             })

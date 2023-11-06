@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getToken, removeToken } from "./util/cookie";
+import { getRootToken, getToken, removeToken } from "./util/cookie";
 import { toast } from "./util/notification";
 import router from '~/router/index'
 // 创建axios实例
@@ -16,11 +16,15 @@ service.interceptors.request.use(function (config) {
     // const token = cookie.get("token");
 
     //往请求头自动添加token
-    const token = getToken()
+    let token = getRootToken();
+    if (token) {
+        config.headers["token"] = token;
+        return config
+    }
+    token = getToken()
     if (token) {
         config.headers["token"] = token;
     }
-
     return config;
 }, function (error) {
     // 对请求错误做些什么
