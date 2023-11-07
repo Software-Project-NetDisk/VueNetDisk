@@ -29,7 +29,7 @@
                 </el-menu-item>
             </el-sub-menu>
 
-            <el-menu-item index="/recycle">
+            <el-menu-item index="/index/recycle">
                 <el-icon>
                     <UploadFilled />
                 </el-icon>
@@ -56,6 +56,12 @@
                         <Setting />
                     </el-icon>
                     <span>退出登录</span>
+                </el-menu-item>
+                <el-menu-item @click="handleChangePassword">
+                    <el-icon>
+                        <Setting />
+                    </el-icon>
+                    <span>修改密码</span>
                 </el-menu-item>
             </el-sub-menu>
         </el-menu>

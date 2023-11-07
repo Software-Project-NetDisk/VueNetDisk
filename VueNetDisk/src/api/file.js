@@ -24,3 +24,28 @@ export function mergeFile(user_id, file_pid, file_md5, file_name, file_size) {
         file_size
     })
 }
+
+export function recycleFile(user_id,file_pid,file_id,recycled){
+    return axios.post("/file/recycleFile",{
+        user_id,
+        file_pid,
+        file_id,
+        recycled,
+    })
+}
+
+export function getRecycleList(user_id,file_pid){
+    return axios.post("/file/RecycleList",{
+        user_id,
+        file_pid,
+    })
+}
+
+
+
+export function deleteFile(file_id){
+    return axios.post("/file/deleteFile",{
+        file_id,
+    })
+}
+

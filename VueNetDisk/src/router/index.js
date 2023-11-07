@@ -42,10 +42,18 @@ const routes = [{
             component: () => import('~/components/FileList.vue'),
         },
         {
-            path: 'uploadList',
+            path: 'recycle',
             // 软加载，可节省空间
-            component: () => import('~/components/UploadList.vue'),
+            component: () => import('~/components/recycled.vue'),
         },
+        {
+            //根据路由参数file_pid动态加载文件列表
+            path: 'RecycleList/:file_pid/:file_name',
+            // 软加载，可节省空间
+            name: 'RecycleList',
+            component: () => import('~/components/recycled.vue'),
+        },
+
     ]
 }
 ];

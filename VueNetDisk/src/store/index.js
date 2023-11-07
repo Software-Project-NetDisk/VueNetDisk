@@ -1,10 +1,11 @@
 import { defineStore } from "pinia"
 import { getInfo } from '~/api/user'
 import { getFileList } from "../api/file"
+import {getRecycleList} from "../api/file"
 
 // 持久化储存共享用户信息
 export const useUserStore = defineStore('user', {
-    persist: true,
+    // persist: true,
     state: () => {
         return {
             // 只是为了初始化，不然会报错，该值没有任何意义
@@ -37,6 +38,26 @@ export const useFileListStore = defineStore('fileList', {
             return new Promise((resolve, reject) => {
                 getFileList(user_id, file_pid).then(res => {
                     this.fileList = res
+                    resolve(res)
+                }).catch(err => reject(err))
+            })
+        }
+    }
+
+})
+
+export const useRecycledListStore = defineStore('RecycleList', {
+    state: () => {
+        return {
+            // 只是为了初始化，不然会报错，该值没有任何意义
+            RecycleList: [[0]],
+        }
+    },
+    actions: {
+        getRecycleList(user_id, file_pid) {
+            return new Promise((resolve, reject) => {
+                getRecycleList(user_id, file_pid).then(res => {
+                    this.RecycleList = res
                     resolve(res)
                 }).catch(err => reject(err))
             })
