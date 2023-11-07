@@ -4,6 +4,7 @@ import About from '~/views/about.vue'
 import Login from '~/views/login.vue'
 import Register from '~/views/register.vue'
 import AppLayout from '~/layout/AppLayout.vue'
+import AppRootLayout from '~/layout/RootLayout/AppRootLayout.vue'
 
 
 const routes = [{
@@ -19,20 +20,22 @@ const routes = [{
 }, {
     path: '/register',
     component: Register
-
 }, {
     path: '/index',
     component: AppLayout,
+    meta: { isRoot: false },
     children: [
         {
             path: '',
             // 软加载，可节省空间
             component: () => import('~/components/FileList.vue'),
+            meta: { isRoot: false },
         },
         {
             path: 'fileList',
             // 软加载，可节省空间
             component: () => import('~/components/FileList.vue'),
+            meta: { isRoot: false },
         },
         {
             //根据路由参数file_pid动态加载文件列表
@@ -40,6 +43,7 @@ const routes = [{
             // 软加载，可节省空间
             name: 'fileList',
             component: () => import('~/components/FileList.vue'),
+            meta: { isRoot: false },
         },
         {
             path: 'recycle',
@@ -50,8 +54,24 @@ const routes = [{
             //根据路由参数file_pid动态加载文件列表
             path: 'RecycleList/:file_pid/:file_name',
             // 软加载，可节省空间
-            name: 'RecycleList',
-            component: () => import('~/components/recycled.vue'),
+            component: () => import('~/components/UploadList.vue'),
+            meta: { isRoot: false },
+        },
+    ]
+}, {
+    path: '/root',
+    component: AppRootLayout,
+    meta: { isRoot: true },
+    children: [
+        {
+            path: '',
+            component: () => import('~/components/UserList.vue'),
+            meta: { isRoot: true },
+        },
+        {
+            path: 'UserList',
+            component: () => import('~/components/UserList.vue'),
+            meta: { isRoot: true },
         },
 
     ]
