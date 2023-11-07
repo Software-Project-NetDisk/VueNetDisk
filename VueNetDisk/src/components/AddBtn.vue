@@ -4,11 +4,16 @@
         <el-button type="primary" :icon="Plus" class="add" circle @click="addBtnVisible = true" />
         <el-dialog v-model="addBtnVisible" :show-close="false" class="addDialog">
             <div>
-                <div @click="createNewFolderVisible = true, addBtnVisible = false">
-                    新建文件夹
+                <div @click="createNewFolderVisible = true, addBtnVisible = false" id="Click">
+                    <el-icon style="margin-right: 5px;color: black;">
+                        <FolderAdd />
+                    </el-icon>新建文件夹
                 </div>
-                <div @click="uploadFileVisible = true, addBtnVisible = false">
-                    上传文件
+
+                <div @click="uploadFileVisible = true, addBtnVisible = false" id="Click">
+                    <el-icon style="margin-right: 5px;color: black;">
+                        <UploadFilled />
+                    </el-icon>上传文件
                 </div>
             </div>
         </el-dialog>
@@ -54,6 +59,8 @@ const uploadFileVisible = ref(false)
         overflow: unset;
     }
 
+    border-radius: 5px;
+    box-shadow: 1px 1px 2px rgb(64, 49, 65);
     width: auto;
     height: auto;
     position: fixed;
@@ -64,4 +71,20 @@ const uploadFileVisible = ref(false)
         padding: 10px;
     }
 }
+#Click {
+    font-size: 18px;
+    margin: 5px;
+}
+
+#Click:hover {
+    cursor: pointer;
+    background-color: #E3E3E5;
+    border-radius: 5px;
+}
+#closeBold{
+    border:none;
+    border-radius:50%;
+    margin-left: 20px;
+}
+
 </style>

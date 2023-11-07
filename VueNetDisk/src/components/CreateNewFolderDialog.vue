@@ -1,7 +1,11 @@
 <template>
-    <el-dialog title="新建文件夹" width="30%">
+    <el-dialog v-model="createNewFolderVisible" title="新建文件夹" width="30%">
+        <el-icon :size="200" style="margin-left: 70px; color: #8898FB;">
+            <FolderOpened />
+        </el-icon>
         <el-input v-model="newFolderName" />
         <template #footer>
+
             <span class="dialog-footer">
                 <el-button type="primary" @click="handlerCreateNewFolder">
                     确定
@@ -9,6 +13,7 @@
             </span>
         </template>
     </el-dialog>
+
 </template>
 
 <script setup>
